@@ -2,6 +2,7 @@ const neofoxos = ["neofox", "neofox_0_0", "neofox_3c", "neofox_amogus", "neofox_
 const funnyfoxxos = neofoxos.map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 const pattern = ":(" + funnyfoxxos.join("|") + "):";
 const regex = new RegExp(pattern, "g");
+let enabled = true;
 let blockedgoobs = "";
 async function bigfetchonce(){
     const respon = await fetch("https://skydevs.me/assets/neofox/blacklist.txt");
@@ -61,7 +62,7 @@ async function handleText(textNode) {
         }
     }
     const match = textNode.nodeValue.match(regex);
-    if (match && !(await blocklist())) {
+    if (match && !(await blocklist()) && enabled) {
         const img = document.createElement("img");
         img.src = `https://skydevs.me/assets/neofox/${gooberdoo}.png`;
         img.width = 25;
@@ -74,6 +75,26 @@ async function handleText(textNode) {
         textNode.parentNode.replaceChild(fragment, textNode);
     }
 }
+
+function togglestat() {
+    enabled = !enabled;
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "togglestat") {
+        togglestat();
+        sendResponse({ reply: enabled ? "Enabled" : "Disabled" });
+        return true;
+    }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "readit") {
+        sendResponse({ reply: enabled ? "Enabled" : "Disabled" });
+        return true;
+    }
+});
+
 function goobs() {
     walk(document.body);
 }
