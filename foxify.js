@@ -67,6 +67,7 @@ async function handleText(textNode) {
         img.src = `https://skydevs.me/assets/neofox/${gooberdoo}.png`;
         img.width = 25;
         img.height = 25;
+        img.classList.add("neofox")
         const parts = textNode.nodeValue.split(match[0]);
         const fragment = document.createDocumentFragment();
         fragment.appendChild(document.createTextNode(parts[0]));
